@@ -15,7 +15,3 @@ db.exec(
     );  
     `
 )
-
-if (isResetMode) {
-    db.exec(`INSERT into users(username, password) VALUES ('bob', '123')`)
-}

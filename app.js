@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import userRouter from './routers/user-router.js'
 import cors from 'cors'
+import loginRouter from './routers/login-router.js'
 
 dotenv.config()
 
@@ -19,12 +20,7 @@ const PORT = process.env.PORT || 8080
 
 
 app.use("/api/users", userRouter)
-
-
-app.post("/log-in", (req, res) => {
-    console.log(req.body)
-    res.send({data: req.body})
-})
+app.use("/api/login", loginRouter)
 
 app.listen(PORT, error => {
     if (error) return console.log(error)

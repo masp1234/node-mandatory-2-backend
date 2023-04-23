@@ -1,1 +1,0 @@
-export default (password, repeatPassword) => password === repeatPassword
