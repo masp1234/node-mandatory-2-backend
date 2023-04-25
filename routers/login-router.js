@@ -13,7 +13,7 @@ router.post("/", async (req, res, next) => {
     if (!checkPassword(password, user.password)) {
         return res.status(401).send({ message: 'Invalid password' })
     }
-    res.send({ message: 'You successfully logged in.'})
+    res.status(200).send({ message: 'You successfully logged in.'})
 })
 
 export default router
