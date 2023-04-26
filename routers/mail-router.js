@@ -1,11 +1,9 @@
 import { Router } from 'express'
 import { sendMail } from '../util/mail.js'
-import dotenv from 'dotenv'
-dotenv.config()
 
 const router = Router()
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
     const { email, subject, text } = req.body
     console.log(req.query)
     console.log(req.body)
@@ -14,19 +12,20 @@ router.post('/', async (req, res, next) => {
         case 'contact':
             try {
                 const supportMail = await sendMail(process.env.SUPPORT_MAIL, subject, text)
+                const userMail = await sendMail(email, 'Thanks for contacting us', 'We have received your email and will be answering shortly.')
                 console.log(supportMail)
             }
             catch(error) {
                 console.log(error)
 
             }
-
             break
         case 'sign-up':
+            await sendMail(email, 'Thanks for creating an account', 'Congratulations on your new account.')
             break
         case 'forgot-password':
+            await sendMail(email, 'Forgotten password', 'Try to remember your password')
             break
-    
       }
 
       res.status(200).send({message: 'Mail was sent'})

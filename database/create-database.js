@@ -12,7 +12,10 @@ db.exec(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT,
         username TEXT,
-        password TEXT
+        password TEXT,
+        role TEXT
     );  
     `
 )
+
+db.run('INSERT INTO users (email, username, password, role) VALUES ("bob@gmail.com", "bob", "123", "admin");')

@@ -19,7 +19,8 @@ router.post("/", async (req, res, next) => {
     await createUser({
         email: email,
         username: username,
-        hashedPassword: hashedPassword
+        hashedPassword: hashedPassword,
+        role: 'user'
     })
 
     

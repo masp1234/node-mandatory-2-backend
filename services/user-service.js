@@ -5,7 +5,7 @@ async function getUserByUsername(username) {
 }
 
 async function createUser(user) {
-    return await db.run('INSERT INTO users (email, username, password) VALUES (?, ?, ?);', [user.email, user.username, user.hashedPassword])
+    return await db.run('INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?);', [user.email, user.username, user.hashedPassword, user.role])
 }
 
 
