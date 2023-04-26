@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer"
-import dotenv from "dotenv"
+import dotenv from 'dotenv'
 dotenv.config()
 
 const transporter = nodemailer.createTransport({
@@ -7,35 +7,22 @@ const transporter = nodemailer.createTransport({
     port: 587,
     secure: false,
     auth: {
-        user: "test123987@outlook.dk",
-        pass: 'masp123123'
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASSWORD
     },
     tls: {
         rejectUnauthorized: false
     }
 })
 
-
-
-
-async function sendMail(recipientAddress, subject, text){
+export async function sendMail(recipientAddress, subject, text){
     const mail = {
-        from: "test123987@outlook.dk",
+        from: process.env.MAIL_USER,
         to: recipientAddress,
         subject: subject,
         text: text
     }
 
-    transporter.sendMail(mail, (error) => {
-    if (error) {
-      console.log("Nodemailer has an error: " + error)
-      return
-    } else {
-      console.log("Mail was succesfully sent")
-      return
-    }
-  })
+    return await transporter.sendMail(mail)
 
 }
-
-sendMail('masp987@gmail.com', 'subject', 'test')

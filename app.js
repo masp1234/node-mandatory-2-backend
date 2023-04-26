@@ -1,8 +1,9 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import userRouter from './routers/user-router.js'
 import cors from 'cors'
+import userRouter from './routers/user-router.js'
 import loginRouter from './routers/login-router.js'
+import mailRouter from './routers/mail-router.js'
 
 dotenv.config()
 
@@ -18,9 +19,9 @@ app.use(cors({
 }))
 const PORT = process.env.PORT || 8080
 
-
 app.use("/api/users", userRouter)
 app.use("/api/login", loginRouter)
+app.use("/api/mail", mailRouter)
 
 app.listen(PORT, error => {
     if (error) return console.log(error)
