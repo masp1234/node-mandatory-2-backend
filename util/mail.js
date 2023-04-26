@@ -1,38 +1,41 @@
-import nodemailer from 'nodemailer'
+import nodemailer from "nodemailer"
+import dotenv from "dotenv"
+dotenv.config()
 
-async function sendEmail() {
-    try {
-      let testAccount = await nodemailer.createTestAccount();
-    
-      let transporter = nodemailer.createTransport({
-          host: "smtp.ethereal.email",
-          port: 587,
-          secure: false,
-          auth: {
-              user: testAccount.user,
-              pass: testAccount.pass
-          },
-          tls: {
-              rejectUnauthorized: false
-          }
-      });
-    
-      let info = await transporter.sendMail({
-          from: 'Dude',
-          to: 'masp1234567@yahoo.com',
-          subject: 'test',
-          text: 'Hello world?',
-          html: '<b>Hello world?</b>'
-      }, (error, info) => {
-        if (error) console.log(error)
-        console.log(info)
-      });
-    
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    
-    } catch (error) {
-      console.log(error);
+const transporter = nodemailer.createTransport({
+    host: "smtp-mail.outlook.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: "test123987@outlook.dk",
+        pass: 'masp123123'
+    },
+    tls: {
+        rejectUnauthorized: false
     }
-  }
-  
-  sendEmail();
+})
+
+
+
+
+async function sendMail(recipientAddress, subject, text){
+    const mail = {
+        from: "test123987@outlook.dk",
+        to: recipientAddress,
+        subject: subject,
+        text: text
+    }
+
+    transporter.sendMail(mail, (error) => {
+    if (error) {
+      console.log("Nodemailer has an error: " + error)
+      return
+    } else {
+      console.log("Mail was succesfully sent")
+      return
+    }
+  })
+
+}
+
+sendMail('masp987@gmail.com', 'subject', 'test')
