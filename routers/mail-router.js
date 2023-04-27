@@ -5,19 +5,16 @@ const router = Router()
 
 router.post('/', async (req, res) => {
     const { email, subject, text } = req.body
-    console.log(req.query)
-    console.log(req.body)
 
     switch(req.query.type) {
         case 'contact':
             try {
-                const supportMail = await sendMail(process.env.SUPPORT_MAIL, subject, text)
-                const userMail = await sendMail(email, 'Thanks for contacting us', 'We have received your email and will be answering shortly.')
+                await sendMail(process.env.SUPPORT_MAIL, subject, text)
+                await sendMail(email, 'Thanks for contacting us', 'We have received your email and will be answering shortly.')
                 console.log(supportMail)
             }
             catch(error) {
                 console.log(error)
-
             }
             break
         case 'sign-up':

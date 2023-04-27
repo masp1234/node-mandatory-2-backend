@@ -13,7 +13,6 @@ async function checkPassword(password, hashedPassword) {
 
 }
 
-
 export {
     validatePassword,
     hashPassword,

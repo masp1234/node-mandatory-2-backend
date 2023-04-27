@@ -10,8 +10,6 @@ router.get("/authorize-test", authorize('admin'), (req, res) => {
     res.send({ message: 'This message is only for admins.'})
 })
 
-
-
 router.post("/login", async (req, res) => {
     const { username, password } = req.body
     const user = await getUserByUsername(username)
@@ -30,7 +28,9 @@ router.post("/login", async (req, res) => {
     })
     res.status(200).send({ message: 'You successfully logged in.', user: {
         id: user.id,
-        username: user.username
+        email: user.email,
+        username: user.username,
+        role: user.role
     }})
 })
 

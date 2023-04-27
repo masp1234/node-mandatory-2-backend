@@ -1,10 +1,25 @@
 import { Router } from 'express'
 import { validatePassword, hashPassword } from '../util/authentication.js'
-import { getUserByUsername, createUser } from '../services/user-service.js'
+import { getUserByUsername, createUser, getAllUsers } from '../services/user-service.js'
+import { authorize } from '../util/authorization.js'
 
 const router = Router()
 
-router.post("/", async (req, res, next) => {
+router.get('/', authorize('admin'), async (req, res) => {
+    const users = await getAllUsers()
+    res.status(200).send({ data: users })
+})
+
+router.get("/:username", async (req, res) => {
+    const { username } = req.params
+    const user = await getUserByUsername(username)
+    if (!user) {
+        return res.status(404).send({ message: `No user with username: ${username} found.`})
+    }
+    res.status(200).send({ data: user })
+})
+
+router.post("/", async (req, res) => {
     const { email, username, password, repeatPassword } = req.body
     if (!validatePassword(password, repeatPassword)) {
         return res.status(422).send({ message: 'Password and repeat password do not match'})
@@ -23,7 +38,6 @@ router.post("/", async (req, res, next) => {
         role: 'user'
     })
 
-    
     res.status(201).send({ message: `You successfully created a user with username: ${username}. If it's a valid email address, you should recieve an email soon.` })
 })
 
