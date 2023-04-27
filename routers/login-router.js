@@ -1,29 +1,16 @@
 import { Router } from 'express'
 import { getUserByUsername } from '../services/user-service.js'
 import { checkPassword } from '../util/authentication.js'
+import { authorize } from '../util/authorization.js'
 import jwt from 'jsonwebtoken'
 
 const router = Router()
 
-router.get("/authorize-test", authorizeAdmin, (req, res, next) => {
-    res.send({ message: 'Success!'})
+router.get("/authorize-test", authorize, (req, res, next) => {
+    res.send({ message: 'This message is only for admins.'})
 })
 
-async function authorizeAdmin(req, res, next) {
-    const token = req.cookies['jwt']
 
-    if (token) {
-        const claims = jwt.verify(token, process.env.TOKEN_KEY)
-        if (claims) {
-            const user = await getUserByUsername(claims)
-            console.log(user)
-            if (user.role === 'admin') {
-                next()
-            }
-        }
-    }
-    res.status(401).send({ message: 'You are unauthorized.'})
-}
 
 router.post("/login", async (req, res, next) => {
     const { username, password } = req.body
@@ -35,7 +22,7 @@ router.post("/login", async (req, res, next) => {
     if (!checkPassword(password, user.password)) {
         return res.status(401).send({ message: 'Invalid password' })
     }
-    const token = jwt.sign(user.username, process.env.TOKEN_KEY)
+    const token = jwt.sign(`${user.id} ${user.username} ${user.role}`, process.env.TOKEN_KEY)
     
     res.cookie('jwt', token, {
         httpOnly: true,
