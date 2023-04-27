@@ -6,13 +6,13 @@ import jwt from 'jsonwebtoken'
 
 const router = Router()
 
-router.get("/authorize-test", authorize, (req, res, next) => {
+router.get("/authorize-test", authorize('admin'), (req, res) => {
     res.send({ message: 'This message is only for admins.'})
 })
 
 
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", async (req, res) => {
     const { username, password } = req.body
     const user = await getUserByUsername(username)
     console.log(user)
@@ -34,7 +34,7 @@ router.post("/login", async (req, res, next) => {
     }})
 })
 
-router.post('/logout', (req, res) => {
+router.post('/logout', authorize('user'), (req, res) => {
     res.cookie('jwt', "", { maxAge: 0 })
     res.send({ message: 'You Successfully logged out' })
 })
